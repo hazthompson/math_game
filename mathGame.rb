@@ -7,9 +7,6 @@ class Player
   end
 end
 
-
-
-
 class Question 
   def initialize 
     @number1 = Random.rand(20)
@@ -26,11 +23,9 @@ class Question
       player.lives -= 1
     end  
   end
-
 end
 
 class Game
-
   def initialize
     @player1 = Player.new "player1"
     @player2 = Player.new "player2"
@@ -57,12 +52,20 @@ class Game
       @current_player = @player1  
     end  
   end
+
+  def winner
+    if @player1.lives > @player2.lives
+      @player1
+    else
+      @player2
+    end
+  end
 end
 
 # puts '---GAME OVER---'
 
-player1 = Player.new "player1"
-player2 = Player.new "player2"
+# player1 = Player.new "player1"
+# player2 = Player.new "player2"
 
 # puts player1.name
 # puts player2.lives
@@ -78,6 +81,7 @@ until game1.finished?
   game1.next_question
   game1.print_score
   if game1.finished?
+    puts "#{game1.winner.name} wins with a score of #{game1.winner.lives}/3"
     puts "---GAME OVER---"
     puts "Goodbye"
   else
