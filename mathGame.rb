@@ -29,7 +29,35 @@ class Question
 
 end
 
+class Game
 
+  def initialize
+    @player1 = Player.new "player1"
+    @player2 = Player.new "player2"
+    @current_player = @player1
+  end
+
+  def finished?
+    @player1.lives < 1 || @player2.lives < 1
+  end
+
+  def print_score
+    puts "P1:#{@player1.lives}/3 vs P2:#{@player2.lives}/3"
+  end
+
+  def next_question
+    question1 = Question.new
+    question1.ask_question(@current_player)
+  end
+
+  def next_player!
+    if (@current_player == @player1)
+      @current_player = @player2
+    else 
+      @current_player = @player1  
+    end  
+  end
+end
 
 # puts '---GAME OVER---'
 
@@ -44,21 +72,16 @@ player2 = Player.new "player2"
 
 # turn 0 call player 1 - turn 1 then call player 1
 
-current_player = player1
+game1 = Game.new
 
-until player1.lives < 1 || player2.lives < 1
-  question1 = Question.new
-  question1.ask_question(current_player)
-  puts "P1:#{player1.lives}/3 vs P2:#{player2.lives}/3"
-  if (player1.lives == 0 || player2.lives == 0 )
+until game1.finished?
+  game1.next_question
+  game1.print_score
+  if game1.finished?
     puts "---GAME OVER---"
     puts "Goodbye"
   else
     puts"---NEW TURN ---" 
-    if (current_player == player1)
-      current_player = player2
-    else 
-      current_player = player1  
-    end
+    game1.next_player!
   end   
 end
