@@ -15,7 +15,9 @@ class Question
 
   def ask_question(player)
     print "#{player.name}: What does #{@number1} plus #{@number2} equal? "
-    answer = gets.chomp
+  end
+
+  def answer!(player, answer)
     if (answer.to_i == (@number1 + @number2)) 
       puts "Well done! That's correct"
     else 
@@ -30,6 +32,7 @@ class Game
     @player1 = Player.new "player1"
     @player2 = Player.new "player2"
     @current_player = @player1
+    @current_question = Question.new
   end
 
   def finished?
@@ -40,9 +43,16 @@ class Game
     puts "P1:#{@player1.lives}/3 vs P2:#{@player2.lives}/3"
   end
 
-  def next_question
-    question1 = Question.new
-    question1.ask_question(@current_player)
+  def print_question
+    @current_question.ask_question(@current_player)
+  end
+
+  def answer_question(answer)
+    @current_question.answer!(@current_player, answer)
+  end
+
+  def next_question!
+    @current_question = Question.new
   end
 
   def next_player!
@@ -78,7 +88,9 @@ end
 game1 = Game.new
 
 until game1.finished?
-  game1.next_question
+  game1.print_question
+  answer = gets.chomp
+  game1.answer_question(answer)
   game1.print_score
   if game1.finished?
     puts "#{game1.winner.name} wins with a score of #{game1.winner.lives}/3"
@@ -86,6 +98,7 @@ until game1.finished?
     puts "Goodbye"
   else
     puts"---NEW TURN ---" 
+    game1.next_question!
     game1.next_player!
   end   
 end
